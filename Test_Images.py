@@ -22,4 +22,5 @@ class Test_Image:
         # To make Image more realistic we performe erosion of dilation of image
         img_not_one = skimage.morphology.closing(img_not_one)
         return img_not_one
+    def image_augmentation(self):
 
