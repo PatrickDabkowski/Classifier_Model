@@ -6,7 +6,7 @@ def Test_is_a_one():
     test_img = Test_Images.Test_Image.is_one()
     # when
     model = Classifier_Model.model
-    pred = model.predict(test_img)
+    pred = model.predict(test_img.reshape((1, 28, 28)))
     #then
     assert pred == '1'
 def Test_is_not_one():
@@ -14,6 +14,10 @@ def Test_is_not_one():
     test_img = Test_Images.Test_Image.is_not_one()
     # when
     model = Classifier_Model.model
-    pred = model.predict(test_img)
+    pred = model.predict(test_img.reshape((1, 28, 28)))
     #then
     assert pred == '0'
+
+Test_is_not_one()
+
+
