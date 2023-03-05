@@ -1,6 +1,7 @@
 import Classifier_Model
 import cv2
 import os
+import time
 
 # Video settings
 cap = cv2.VideoCapture(1)
@@ -28,10 +29,13 @@ while cap.isOpened():
     # Fliping mirror effect
     frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     frame = cv2.flip(frame, 1)
+    thresh = cv2.threshold(frame, 0, 255, cv2.THRESH_BINARY_INV | cv2.THRESH_OTSU)[1]
+    kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (4, 4))
+    frame = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, kernel)
 
     result = classify(frame)
     result = result.argmax(axis=-1)
-
+    time.sleep(0.11)
     print('number ', result)
     cv2.imshow('Video Digit Classifier', frame)
     if cv2.waitKey(1) == 27:
