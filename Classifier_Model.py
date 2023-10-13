@@ -2,10 +2,12 @@ import Dataset
 import tensorflow
 import tensorflow.keras as keras
 import os
+import argparse
 class Model:
-    def __init__(self, X_train, y_train):
+    def __init__(self, X_train, y_train, target_path):
         self.X_train = X_train
         self.y_train = y_train
+        self.target_path = target_path
     def Bayes(self):
         from sklearn.naive_bayes import ComplementNB
         Bayesian = ComplementNB()
@@ -48,17 +50,23 @@ class Model:
         model.summary()
 
         history = model.fit(self.X_train, self.y_train, validation_data=(self.X_valid, self.y_valid), epochs=20, callbacks=[early_stopping])
-        model.save('Model.CNN')
+        model.save(self.target_path)
         return model
 
+def get_model(model_path, target_path):
+    if os.path.exists(model_path):
+        model = keras.models.load_model(parser.model_path)
+        print('Model Load')
+    else:
+        X_train, X_test, y_train, y_test = Dataset.get_dataset()
 
-if os.path.exists("Model.CNN"):
-    model = keras.models.load_model('Model.CNN')
-    print('Model Load')
-else:
-    X_train = Dataset.X_train
-    y_train = Dataset.y_train
+        class_model = Model(X_train, y_train, target_path)
+        model = class_model.CNN()
+        print('Model creat')
 
-    class_model = Model(X_train, y_train)
-    model = class_model.CNN()
-    print('Model creat')
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='Model loading or training')
+    parser.add_argument('model_path', type=str, default="Model.CNN", help="path to your trained model")
+    parser.add_argument('target_path', type=str, default="Model.CNN", help="path to save your model")
+
+    get_model(parser.model_path, parser.target_path)
